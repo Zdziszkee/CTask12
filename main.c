@@ -6,14 +6,14 @@
 void unsigned_binary_multiplication(unsigned long first, unsigned long second, unsigned long *youngerBits,
                                     unsigned long *olderBits);
 
-void bin(unsigned long n);
 
 int main() {
     unsigned long olderBits = 0;
     unsigned long youngerBits = 0;
-    unsigned_binary_multiplication(3, 3, &youngerBits, &olderBits);
-    bin(olderBits);
-    bin(youngerBits);
+    unsigned_binary_multiplication(4, 4, &youngerBits, &olderBits);
+    printf("Older bits: %ld ",olderBits);
+    printf("Younger bits: %ld",youngerBits);
+
     return 0;
 }
 
@@ -21,14 +21,19 @@ void unsigned_binary_multiplication(unsigned long first, unsigned long second, u
                                     unsigned long *olderBits) {
     *youngerBits = second;
     *olderBits = 0;
-    int bits = sizeof(first) * 8;
+    int bits = 0;
+    unsigned long temp = second;
+    while (temp != 0) {
+        temp>>=1;
+        bits++;
+    }
     for (int i = 0; i < bits; ++i) {
         if ((*youngerBits & 1) == 1) {
             *olderBits += first;
         }
         *youngerBits >>= 1;
         if ((*olderBits & 1) == 1) {
-            unsigned long offset = (1L<<63L);
+            unsigned long offset = (1L << 63L);
             *youngerBits |= offset;
         }
         *olderBits >>= 1;
@@ -36,20 +41,7 @@ void unsigned_binary_multiplication(unsigned long first, unsigned long second, u
     }
 
 
+
 }
 
-void bin(unsigned long n) {
-    if (n == 0) {
-        printf("0");
-        return;
-    }
-    while (n) {
-        if (n & 1)
-            printf("1");
-        else
-            printf("0");
 
-        n >>= 1;
-    }
-    printf("");
-}
